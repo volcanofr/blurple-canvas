@@ -23,8 +23,7 @@ const Table = styled("table")`
   font-size: min(4svw, 1.75rem);
   font-variant-numeric: tabular-nums;
   font-weight: 500;
-  inline-size: min(40rem, 100svw);
-  max-inline-size: 100%;
+  inline-size: min(40rem, 100%);
 
   th,
   td {
@@ -38,13 +37,8 @@ const RankCell = styled("td")`
 `;
 
 const AvatarCell = styled("td")`
-  --avatar-size: 2.25rem;
-
+  --avatar-size: min(8svw, 3.75rem);
   width: calc(var(--avatar-size) + 2 * var(--cell-padding));
-
-  ${({ theme }) => theme.breakpoints.up("sm")} {
-    --avatar-size: 3.75rem;
-  }
 `;
 
 const UsernameCell = styled("td")`
@@ -54,7 +48,6 @@ const UsernameCell = styled("td")`
 `;
 
 const Username = styled("p")`
-  max-inline-size: 22rem;
   word-break: break-all;
 `;
 
@@ -74,14 +67,10 @@ const PixelCount = styled("span")`
 
 const PixelCountLabel = styled("span")`
   color: oklch(from var(--discord-white) l c h / 55%);
-  font-size: 0.65rem;
+  font-size: min(2svw, 0.75rem);
   font-weight: 600;
   letter-spacing: 0.04em;
   text-transform: uppercase;
-
-  ${({ theme }) => theme.breakpoints.up("sm")} {
-    font-size: 0.75rem;
-  }
 `;
 
 const NoContentsMessage = styled("p")`
