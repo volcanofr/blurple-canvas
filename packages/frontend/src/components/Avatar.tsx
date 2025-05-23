@@ -1,4 +1,4 @@
-import { styled } from "@mui/material";
+import { Skeleton, styled } from "@mui/material";
 
 import { DiscordUserProfile } from "@blurple-canvas-web/types";
 
@@ -35,5 +35,16 @@ export default function Avatar({
         src="https://cdn.discordapp.com/embed/avatars/1.png"
       />
     </StyledObject>
+  );
+}
+
+export function AvatarSkeleton() {
+  return (
+    <Skeleton
+      variant="circular"
+      width="100%"
+      height="auto"
+      sx={{ aspectRatio: 1 }}
+    />
   );
 }
