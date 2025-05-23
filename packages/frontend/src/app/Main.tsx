@@ -9,8 +9,6 @@ import { SlideableDrawer } from "@/components/slideable-drawer";
 const Wrapper = styled("main")`
   body:has(&) {
     --navbar-height: 4rem;
-    --layout-padding-y: 1rem;
-    --layout-padding-x: 2rem;
     --row-gap: 0.5rem;
     --column-gap: 1rem;
     --action-panel-width: 19rem;
@@ -18,6 +16,11 @@ const Wrapper = styled("main")`
     display: grid;
     grid-template-rows: var(--navbar-height) calc(100dvh - var(--navbar-height));
     height: 100dvh;
+
+    ${({ theme }) => theme.breakpoints.up("lg")} {
+      --column-gap: 2rem;
+      --action-panel-width: 23rem;
+    }
   }
 
   display: grid;
@@ -30,13 +33,6 @@ const Wrapper = styled("main")`
     grid-template-columns: 1fr var(--action-panel-width);
     grid-template-rows: initial;
     padding: var(--layout-padding-y) var(--layout-padding-x);
-  }
-
-  ${({ theme }) => theme.breakpoints.up("lg")} {
-    --layout-padding-y: 2rem;
-    --layout-padding-x: 4rem;
-    --column-gap: 2rem;
-    --action-panel-width: 23rem;
   }
 `;
 
