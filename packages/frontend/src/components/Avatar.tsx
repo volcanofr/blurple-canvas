@@ -1,6 +1,7 @@
-import { Skeleton, styled } from "@mui/material";
+"use client";
 
 import { DiscordUserProfile } from "@blurple-canvas-web/types";
+import { Skeleton, styled } from "@mui/material";
 
 type AvatarProps = Pick<
   DiscordUserProfile,
