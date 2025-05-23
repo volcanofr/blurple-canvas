@@ -1,6 +1,6 @@
 "use client";
 
-import Avatar from "@/components/Avatar";
+import Avatar, { AvatarSkeleton } from "@/components/Avatar";
 import { useCanvasContext } from "@/contexts";
 import { useLeaderboard } from "@/hooks/queries/useLeaderboard";
 import { LeaderboardEntry } from "@blurple-canvas-web/types";
@@ -10,8 +10,9 @@ const Wrapper = styled("div")`
   display: flex;
   flex-direction: column;
   place-items: center;
-  padding: 4rem 4rem;
-  gap: 4rem;
+  padding-inline: var(--layout-padding-x);
+  padding-block: calc(2 * var(--layout-padding-y));
+  gap: calc(2 * var(--layout-padding-y));
 `;
 
 const TitleBlock = styled("div")`
@@ -27,25 +28,34 @@ const Table = styled("table")`
 
   th,
   td {
-    padding: min(1.5svw, 1rem);
+    --cell-padding: min(1.5svw, 1rem);
+    padding: var(--cell-padding);
   }
 `;
 
 const RankCell = styled("td")`
   color: oklch(from var(--discord-white) l c h / 45%);
-  text-align: center;
 `;
 
-const UserCell = styled("td")`
-  align-items: center;
-  display: flex;
+const AvatarCell = styled("td")`
+  --avatar-size: 2.25rem;
+
+  width: calc(var(--avatar-size) + 2 * var(--cell-padding));
+
+  ${({ theme }) => theme.breakpoints.up("sm")} {
+    --avatar-size: 3.75rem;
+  }
+`;
+
+const UsernameCell = styled("td")`
   font-stretch: 125%;
   font-weight: 900;
-  gap: 1rem;
+  text-align: left;
 `;
 
 const Username = styled("p")`
   max-inline-size: 22rem;
+  word-break: break-all;
 `;
 
 const PixelCountCell = styled("td")`
@@ -64,10 +74,14 @@ const PixelCount = styled("span")`
 
 const PixelCountLabel = styled("span")`
   color: oklch(from var(--discord-white) l c h / 55%);
-  font-size: 0.75rem;
+  font-size: 0.65rem;
   font-weight: 600;
   letter-spacing: 0.04em;
   text-transform: uppercase;
+
+  ${({ theme }) => theme.breakpoints.up("sm")} {
+    font-size: 0.75rem;
+  }
 `;
 
 const NoContentsMessage = styled("p")`
@@ -83,20 +97,21 @@ function leaderboardRecordToTableRow(user?: LeaderboardEntry): JSX.Element {
   return (
     <tr key={userId}>
       <RankCell>{rank}</RankCell>
-      <UserCell>
+      <AvatarCell>
         {userId && profilePictureUrl ?
           <Avatar
             username={username ?? userId}
             profilePictureUrl={profilePictureUrl}
-            size={60}
           />
-        : <Skeleton variant="circular" width={60} height={60} />}
+        : <AvatarSkeleton />}
+      </AvatarCell>
+      <UsernameCell>
         <Username>
           {userId ?
             (username ?? userId)
           : <Skeleton variant="rounded" width={260} />}
         </Username>
-      </UserCell>
+      </UsernameCell>
       <PixelCountCell>
         <PixelCountCellContents>
           <PixelCount>
