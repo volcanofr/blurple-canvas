@@ -42,10 +42,10 @@ const NoContentsMessage = styled("p")`
 
 export default function Leaderboard() {
   const { canvas } = useCanvasContext();
-  const { data: leaderboard = [], isLoading: leaderboardIsLoading } =
+  const { data: leaderboard = [], isLoading: isLeaderboardLoading } =
     useLeaderboard(canvas.id);
 
-  const entries = toLeaderboardRowEntries(leaderboardIsLoading, leaderboard);
+  const entries = toLeaderboardRowEntries(isLeaderboardLoading, leaderboard);
   const isLeaderboardEmpty = entries.length === 0;
 
   return (

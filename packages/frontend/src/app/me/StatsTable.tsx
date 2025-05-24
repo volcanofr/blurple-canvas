@@ -39,14 +39,11 @@ const Table = styled("table")`
 
 interface StatsTableProps {
   stats?: UserStats;
-  statsAreLoading: boolean;
+  isStatsLoading: boolean;
 }
 
-export default function StatsTable({
-  stats,
-  statsAreLoading,
-}: StatsTableProps) {
-  if (!stats && !statsAreLoading)
+export default function StatsTable({ stats, isStatsLoading }: StatsTableProps) {
+  if (!stats && !isStatsLoading)
     return (
       <EmptyStateMessage>You don’t have any stats (yet)!</EmptyStateMessage>
     );
@@ -59,36 +56,36 @@ export default function StatsTable({
       <tbody>
         <tr>
           <th>
-            {statsAreLoading ?
+            {isStatsLoading ?
               <Skeleton width={150} />
             : <>{totalPixels?.toLocaleString() ?? "?"}&nbsp;pixels placed</>}
           </th>
           <td>
-            {statsAreLoading ?
+            {isStatsLoading ?
               <Skeleton width={40} />
             : rank && `${rank}${getOrdinalSuffix(rank)}`}
           </td>
         </tr>
         <tr>
           <th>
-            {statsAreLoading ?
+            {isStatsLoading ?
               <Skeleton width={130} />
             : <>Most used color</>}
           </th>
           <td>
-            {statsAreLoading ?
+            {isStatsLoading ?
               <Skeleton width={80} />
             : (mostFrequentColor?.name ?? "Unknown")}
           </td>
         </tr>
         <tr>
           <th>
-            {statsAreLoading ?
+            {isStatsLoading ?
               <Skeleton width={170} />
             : <>Most recently placed</>}
           </th>
           <td>
-            {statsAreLoading ?
+            {isStatsLoading ?
               <Skeleton width={150} />
             : mostRecentTimestamp ?
               <span title={formatTimestamp(mostRecentTimestamp)}>

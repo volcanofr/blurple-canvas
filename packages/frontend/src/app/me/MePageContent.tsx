@@ -45,7 +45,7 @@ export default function MePageContent() {
   const { signOut, user } = useAuthContext();
   const router = useRouter();
 
-  const { data: stats, isLoading: statsAreLoading } = useUserStats(
+  const { data: stats, isLoading: isStatsLoading } = useUserStats(
     user?.id,
     activeCanvas.id,
   );
@@ -77,7 +77,7 @@ export default function MePageContent() {
         <h2>{activeCanvas.name}</h2>
         <StatsTable
           stats={stats ?? undefined}
-          statsAreLoading={statsAreLoading}
+          isStatsLoading={isStatsLoading}
         />
       </StatsCard>
     </Container>
