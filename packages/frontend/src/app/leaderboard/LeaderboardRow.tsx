@@ -18,8 +18,14 @@ const AvatarCell = styled("td")`
   --avatar-size: min(8svw, 3.75rem);
   --width: calc(var(--avatar-size) + 2 * var(--cell-padding));
 
+  // We need to define the width here so that the cell doesn't get wider than the avatar.
   width: var(--width);
   min-width: var(--width);
+  max-width: var(--width);
+
+  > * {
+    max-height: var(--avatar-size);
+  }
 `;
 
 const UsernameCell = styled("td")`
