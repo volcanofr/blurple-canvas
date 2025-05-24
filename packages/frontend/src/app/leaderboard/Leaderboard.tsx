@@ -1,10 +1,10 @@
 "use client";
 
-import Avatar, { AvatarSkeleton } from "@/components/Avatar";
 import { useCanvasContext } from "@/contexts";
 import { useLeaderboard } from "@/hooks/queries/useLeaderboard";
 import { LeaderboardEntry } from "@blurple-canvas-web/types";
-import { Skeleton, styled } from "@mui/material";
+import { styled } from "@mui/material";
+import LeaderboardRow, { LeaderboardRowEntry } from "./LeaderboardRow";
 
 const Wrapper = styled("div")`
   display: flex;
@@ -32,50 +32,6 @@ const Table = styled("table")`
   }
 `;
 
-const RankCell = styled("td")`
-  color: oklch(from var(--discord-white) l c h / 45%);
-`;
-
-const AvatarCell = styled("td")`
-  --avatar-size: min(8svw, 3.75rem);
-  --width: calc(var(--avatar-size) + 2 * var(--cell-padding));
-
-  width: var(--width);
-  min-width: var(--width);
-`;
-
-const UsernameCell = styled("td")`
-  font-stretch: 125%;
-  font-weight: 900;
-  text-align: left;
-`;
-
-const Username = styled("p")`
-  word-break: break-all;
-`;
-
-const PixelCountCell = styled("td")`
-  text-align: center;
-`;
-
-const PixelCountCellContents = styled("div")`
-  display: grid;
-  place-items: center;
-`;
-
-const PixelCount = styled("span")`
-  font-stretch: 125%;
-  font-weight: 900;
-`;
-
-const PixelCountLabel = styled("span")`
-  color: oklch(from var(--discord-white) l c h / 55%);
-  font-size: min(2svw, 0.75rem);
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-`;
-
 const NoContentsMessage = styled("p")`
   color: oklch(from var(--discord-white) l c h / 55%);
   font-size: 1.2rem;
@@ -84,48 +40,13 @@ const NoContentsMessage = styled("p")`
   text-align: center;
 `;
 
-function leaderboardRecordToTableRow(user?: LeaderboardEntry): JSX.Element {
-  const { userId, rank, profilePictureUrl, username, totalPixels } = user ?? {};
-  return (
-    <tr key={userId}>
-      <RankCell>{rank}</RankCell>
-      <AvatarCell>
-        {userId && profilePictureUrl ?
-          <Avatar
-            username={username ?? userId}
-            profilePictureUrl={profilePictureUrl}
-          />
-        : <AvatarSkeleton />}
-      </AvatarCell>
-      <UsernameCell>
-        <Username>
-          {userId ?
-            (username ?? userId)
-          : <Skeleton variant="rounded" width="min(35svw, 16rem)" />}
-        </Username>
-      </UsernameCell>
-      <PixelCountCell>
-        <PixelCountCellContents>
-          <PixelCount>
-            {totalPixels ?
-              totalPixels.toLocaleString()
-            : <Skeleton width="min(12svw, 5.5rem)" />}
-          </PixelCount>
-          <PixelCountLabel>
-            {totalPixels ?
-              <>pixels placed</>
-            : <Skeleton width="min(12svw, 5.5rem)" />}
-          </PixelCountLabel>
-        </PixelCountCellContents>
-      </PixelCountCell>
-    </tr>
-  );
-}
-
 export default function Leaderboard() {
   const { canvas } = useCanvasContext();
   const { data: leaderboard = [], isLoading: leaderboardIsLoading } =
     useLeaderboard(canvas.id);
+
+  const entries = toLeaderboardRowEntries(leaderboardIsLoading, leaderboard);
+  const isLeaderboardEmpty = entries.length === 0;
 
   return (
     <Wrapper>
@@ -142,13 +63,32 @@ export default function Leaderboard() {
           </tr>
         </thead>
         <tbody>
-          {leaderboardIsLoading ?
-            Array.from({ length: 10 }, () => leaderboardRecordToTableRow())
-          : leaderboard.length > 0 ?
-            leaderboard.map(leaderboardRecordToTableRow)
-          : <NoContentsMessage>No leaderboard found</NoContentsMessage>}
+          {isLeaderboardEmpty ?
+            <NoContentsMessage>No leaderboard found</NoContentsMessage>
+          : entries.map((entry) => (
+              <LeaderboardRow key={entry.userId} entry={entry} />
+            ))
+          }
         </tbody>
       </Table>
     </Wrapper>
   );
+}
+
+function toLeaderboardRowEntries(
+  isLoading: boolean,
+  entries: LeaderboardEntry[],
+): LeaderboardRowEntry[] {
+  if (isLoading) {
+    return Array.from({ length: 10 }, (_, index) => ({
+      isLoading: true,
+      userId: index.toString(), // This is used for the React key prop.
+      rank: index + 1,
+    }));
+  }
+
+  return entries.map((entry) => ({
+    isLoading: false,
+    ...entry,
+  }));
 }
