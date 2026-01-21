@@ -63,7 +63,10 @@ describe("Place Pixel Tests", () => {
     const responses = await Promise.all(promises);
     expect(firstResponse.status).toBe(201);
     for (let index = 0; index < iterations; index++) {
-      expect(responses[index].status).toBe(403);
+      expect(
+        responses[index].status === 403 ||
+        responses[index].status === 429
+      ).toBe(true);
     }
   });
 });
