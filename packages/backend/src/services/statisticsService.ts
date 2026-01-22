@@ -48,15 +48,17 @@ export async function getUserStats(
 }
 
 /**
- * Retrieves the top n users on the leaderboard for a canvas, up to a maximum
- * of 40.
+ * Retrieves the top `size` (max 40), from the rank `fromRank`
+ * users on the leaderboard for a canvas.
  */
 export async function getLeaderboard(
   canvasId: CanvasInfo["id"],
   size = 10,
-): Promise<LeaderboardEntry[]> {
+  fromRank = 1,
+): Promise<{ total: number; entries: LeaderboardEntry[] }> {
   const leaderboard = await prisma.leaderboard.findMany({
-    take: Math.min(size, 40), // Arbitrary maximum
+    skip: Math.max(fromRank - 1, 0),
+    take: Math.min(Math.max(size, 1), 40), // Arbitrary maximum
     orderBy: {
       rank: "asc",
     },
@@ -76,13 +78,22 @@ export async function getLeaderboard(
     },
   });
 
-  return leaderboard.map((row) => ({
-    rank: row.rank,
-    userId: row.user_id.toString(),
-    totalPixels: row.total_pixels,
-    username: row.discord_user_profile?.username,
-    profilePictureUrl:
-      row.discord_user_profile?.profile_picture_url ??
-      createDefaultAvatarUrl(row.user_id),
-  }));
+  const total = await prisma.leaderboard.count({
+    where: {
+      canvas_id: canvasId,
+    },
+  });
+
+  return {
+    total,
+    entries: leaderboard.map((row) => ({
+      rank: row.rank,
+      userId: row.user_id.toString(),
+      totalPixels: row.total_pixels,
+      username: row.discord_user_profile?.username,
+      profilePictureUrl:
+        row.discord_user_profile?.profile_picture_url ??
+        createDefaultAvatarUrl(row.user_id),
+    })),
+  }
 }

@@ -4,7 +4,8 @@ import Avatar from "@/components/Avatar";
 import { useCanvasContext } from "@/contexts";
 import { useLeaderboard } from "@/hooks/queries/useLeaderboard";
 import { LeaderboardEntry } from "@blurple-canvas-web/types";
-import { Skeleton, styled } from "@mui/material";
+import { Pagination, PaginationItem, Skeleton, styled } from "@mui/material";
+import { useEffect, useState } from "react";
 
 const Wrapper = styled("div")`
   display: flex;
@@ -117,8 +118,15 @@ function leaderboardRecordToTableRow(user?: LeaderboardEntry): JSX.Element {
 
 export default function Leaderboard() {
   const { canvas } = useCanvasContext();
-  const { data: leaderboard = [], isLoading: leaderboardIsLoading } =
-    useLeaderboard(canvas.id);
+  const [page, setPage] = useState(0);
+  const {
+    data: { total, entries: leaderboard } = { total: undefined, entries: [] },
+    isLoading: leaderboardIsLoading,
+  } = useLeaderboard(canvas.id, page * 10 + 1);
+
+  useEffect(() => {
+    if (canvas.id) setPage(0);
+  }, [canvas.id]);
 
   return (
     <Wrapper>
@@ -142,6 +150,32 @@ export default function Leaderboard() {
           : <NoContentsMessage>No leaderboard found</NoContentsMessage>}
         </tbody>
       </Table>
+      <Pagination
+        page={page + 1}
+        siblingCount={0}
+        boundaryCount={0}
+        showFirstButton
+        showLastButton
+        onChange={(_, value) => setPage(value - 1)}
+        count={total ? Math.ceil(total / 10) : page + 1}
+        color="primary"
+        size="large"
+        renderItem={(item) => {
+          switch (item.type) {
+            case "start-ellipsis":
+            case "end-ellipsis":
+              return null;
+            case "page":
+              if (item.page !== page + 1)
+                return null;
+          }
+
+          return <PaginationItem {...item} />;
+        }}
+        sx={{
+          display: total === 0 ? "none" : "inherit",
+        }}
+      />
     </Wrapper>
   );
 }

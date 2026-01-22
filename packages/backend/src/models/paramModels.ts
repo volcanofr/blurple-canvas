@@ -14,6 +14,7 @@ export type LeaderboardParamModel = typeof CanvasIdParamModel;
 
 export const LeaderboardQueryModel = z.object({
   size: z.coerce.number().int().positive().optional(),
+  fromRank: z.coerce.number().int().positive().optional(),
 });
 
 export const PixelHistoryParamModel = z.object({

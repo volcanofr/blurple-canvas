@@ -34,8 +34,8 @@ statisticsRouter.get("/leaderboard/:canvasId", async (req, res) => {
       );
     }
 
-    const { size } = queryParams.data;
-    const leaderboard = await getLeaderboard(canvasId, size);
+    const { size, fromRank } = queryParams.data;
+    const leaderboard = await getLeaderboard(canvasId, size, fromRank);
 
     res.status(200).json(leaderboard);
   } catch (error) {
