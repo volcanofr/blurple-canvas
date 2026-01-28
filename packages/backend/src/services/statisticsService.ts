@@ -53,12 +53,13 @@ export async function getUserStats(
  */
 export async function getLeaderboard(
   canvasId: CanvasInfo["id"],
+  page = 1,
   size = 10,
-  fromRank = 1,
-): Promise<{ total: number; entries: LeaderboardEntry[] }> {
+): Promise<{ total: number; page: number; size: number; entries: LeaderboardEntry[] }> {
+  const take = Math.min(Math.max(size, 1), 40); // Arbitrary maximum
   const leaderboard = await prisma.leaderboard.findMany({
-    skip: Math.max(fromRank - 1, 0),
-    take: Math.min(Math.max(size, 1), 40), // Arbitrary maximum
+    skip: Math.max((page - 1) * take, 0),
+    take,
     orderBy: {
       rank: "asc",
     },
@@ -86,6 +87,8 @@ export async function getLeaderboard(
 
   return {
     total,
+    page: Math.max(page, 1),
+    size: take,
     entries: leaderboard.map((row) => ({
       rank: row.rank,
       userId: row.user_id.toString(),

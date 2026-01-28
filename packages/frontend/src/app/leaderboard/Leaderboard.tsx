@@ -120,9 +120,10 @@ export default function Leaderboard() {
   const { canvas } = useCanvasContext();
   const [page, setPage] = useState(0);
   const {
-    data: { total, entries: leaderboard } = { total: undefined, entries: [] },
+    data: { total, page: currentPage, size, entries: leaderboard } =
+      { total: undefined, page: page + 1, size: 10, entries: [] },
     isLoading: leaderboardIsLoading,
-  } = useLeaderboard(canvas.id, page * 10 + 1);
+  } = useLeaderboard(canvas.id, page + 1);
 
   useEffect(() => {
     if (canvas.id) setPage(0);
@@ -144,7 +145,7 @@ export default function Leaderboard() {
         </thead>
         <tbody>
           {leaderboardIsLoading ?
-            Array.from({ length: 10 }, () => leaderboardRecordToTableRow())
+            Array.from({ length: size }, () => leaderboardRecordToTableRow())
           : leaderboard.length > 0 ?
             leaderboard.map(leaderboardRecordToTableRow)
           : <NoContentsMessage>No leaderboard found</NoContentsMessage>}
@@ -157,7 +158,7 @@ export default function Leaderboard() {
         showFirstButton
         showLastButton
         onChange={(_, value) => setPage(value - 1)}
-        count={total ? Math.ceil(total / 10) : page + 1}
+        count={total ? Math.ceil(total / size) : currentPage}
         color="primary"
         size="large"
         renderItem={(item) => {
@@ -166,7 +167,7 @@ export default function Leaderboard() {
             case "end-ellipsis":
               return null;
             case "page":
-              if (item.page !== page + 1)
+              if (item.page !== currentPage)
                 return null;
           }
 

@@ -4,6 +4,7 @@ export * from "./discordGuildRecord";
 export * from "./discordUserProfile";
 export * from "./pixelInfo";
 export * from "./event";
+export * from "./pagination";
 export * from "./palette";
 export * from "./pixelHistory";
 export * from "./pixelInfo";
