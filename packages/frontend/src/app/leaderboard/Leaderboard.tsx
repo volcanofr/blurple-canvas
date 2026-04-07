@@ -52,10 +52,7 @@ const UserCell = styled("td")`
 `;
 
 const Username = styled("p")`
-  max-inline-size: min(22rem, 50vw);
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow: hidden;
+  max-inline-size: 22rem;
 `;
 
 const PixelCountCell = styled("td")`
