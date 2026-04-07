@@ -48,7 +48,7 @@ export async function getUserStats(
 }
 
 /**
- * Retrieves the top `size` (max 40), from the rank `fromRank`
+ * Retrieves the top `size` (max 40), from the rank `(page - 1) * size`
  * users on the leaderboard for a canvas.
  */
 export async function getLeaderboard(
