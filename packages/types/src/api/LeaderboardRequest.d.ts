@@ -1,10 +1,16 @@
-import { CanvasInfo, CanvasSummary, LeaderboardEntry, Pagination, Palette } from "..";
+import {
+  CanvasInfo,
+  CanvasSummary,
+  LeaderboardEntry,
+  Paginated,
+  Palette,
+} from "..";
 
 export interface Params {
   canvasId: CanvasSummary["id"];
 }
 
-export type ResBody = Pagination<LeaderboardEntry>;
+export type ResBody = Paginated<LeaderboardEntry>;
 
 export type ReqBody = Record<string, never>;
 export type ReqQuery = Record<string, never>;

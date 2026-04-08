@@ -6,7 +6,11 @@ import axios from "axios";
 import config from "@/config";
 import { CanvasInfo, LeaderboardRequest } from "@blurple-canvas-web/types";
 
-export function useLeaderboard(canvasId: CanvasInfo["id"], page = 1, size = 10) {
+export function useLeaderboard(
+  canvasId: CanvasInfo["id"],
+  page = 1,
+  size = 10,
+) {
   const getLeaderboard = async () => {
     const response = await axios.get<LeaderboardRequest.ResBody>(
       `${config.apiUrl}/api/v1/statistics/leaderboard/${canvasId}`,
@@ -16,7 +20,7 @@ export function useLeaderboard(canvasId: CanvasInfo["id"], page = 1, size = 10) 
   };
 
   return useQuery({
-    queryKey: ["leaderboard", canvasId, page, size],
+    queryKey: ["leaderboard", canvasId, { page, size }],
     queryFn: getLeaderboard,
     refetchOnMount: false,
     refetchOnWindowFocus: false,

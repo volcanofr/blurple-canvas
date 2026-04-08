@@ -2,6 +2,7 @@ import { prisma } from "@/client";
 import {
   CanvasInfo,
   LeaderboardEntry,
+  Paginated,
   UserStats,
 } from "@blurple-canvas-web/types";
 import { createDefaultAvatarUrl } from "./discordProfileService";
@@ -55,7 +56,7 @@ export async function getLeaderboard(
   canvasId: CanvasInfo["id"],
   page = 1,
   size = 10,
-): Promise<{ total: number; page: number; size: number; entries: LeaderboardEntry[] }> {
+): Promise<Paginated<LeaderboardEntry>> {
   const take = Math.min(Math.max(size, 1), 40); // Arbitrary maximum
   const leaderboard = await prisma.leaderboard.findMany({
     skip: Math.max((page - 1) * take, 0),
@@ -98,5 +99,5 @@ export async function getLeaderboard(
         row.discord_user_profile?.profile_picture_url ??
         createDefaultAvatarUrl(row.user_id),
     })),
-  }
+  };
 }
