@@ -1,10 +1,9 @@
 "use client";
 
+import { CanvasInfo, LeaderboardRequest } from "@blurple-canvas-web/types";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-
 import config from "@/config";
-import { CanvasInfo, LeaderboardRequest } from "@blurple-canvas-web/types";
 
 export function useLeaderboard(
   canvasId: CanvasInfo["id"],
@@ -13,7 +12,7 @@ export function useLeaderboard(
 ) {
   const getLeaderboard = async () => {
     const response = await axios.get<LeaderboardRequest.ResBody>(
-      `${config.apiUrl}/api/v1/statistics/leaderboard/${canvasId}`,
+      `${config.apiUrl}/api/v1/statistics/leaderboard/${encodeURIComponent(canvasId)}`,
       { params: { page, size } },
     );
     return response.data;

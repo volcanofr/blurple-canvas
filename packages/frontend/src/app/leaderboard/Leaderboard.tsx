@@ -1,11 +1,11 @@
 "use client";
 
+import { LeaderboardEntry } from "@blurple-canvas-web/types";
+import { Pagination, PaginationItem, Skeleton, styled } from "@mui/material";
+import { JSX, useEffect, useState } from "react";
 import Avatar from "@/components/Avatar";
 import { useCanvasContext } from "@/contexts";
 import { useLeaderboard } from "@/hooks/queries/useLeaderboard";
-import { LeaderboardEntry } from "@blurple-canvas-web/types";
-import { Pagination, PaginationItem, Skeleton, styled } from "@mui/material";
-import { useEffect, useState } from "react";
 
 const Wrapper = styled("div")`
   display: flex;
@@ -126,8 +126,12 @@ export default function Leaderboard() {
   const { canvas } = useCanvasContext();
   const [page, setPage] = useState(0);
   const {
-    data: { total, page: currentPage, size, entries: leaderboard } =
-      { total: undefined, page: page + 1, size: 10, entries: [] },
+    data: { total, page: currentPage, size, entries: leaderboard } = {
+      total: undefined,
+      page: page + 1,
+      size: 10,
+      entries: [],
+    },
     isLoading: leaderboardIsLoading,
   } = useLeaderboard(canvas.id, page + 1);
 
@@ -173,8 +177,7 @@ export default function Leaderboard() {
             case "end-ellipsis":
               return null;
             case "page":
-              if (item.page !== currentPage)
-                return null;
+              if (item.page !== currentPage) return null;
           }
 
           return <PaginationItem {...item} />;
