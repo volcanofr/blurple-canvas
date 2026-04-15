@@ -1,5 +1,6 @@
 import { styled } from "@mui/material";
 import { Copy as CopyIcon } from "lucide-react";
+import VisuallyHidden from "@/components/VisuallyHidden";
 import config from "@/config";
 import { useCanvasContext, useSelectedColorContext } from "@/contexts";
 
@@ -26,11 +27,13 @@ const CopyButton = styled("button")<CopyButtonProps>`
   place-items: center;
   transition: background-color var(--transition-duration-fast) ease;
 
-  :hover {
-    background-color: oklch(from var(--discord-white) l c h / 24%);
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      background-color: oklch(from var(--discord-white) l c h / 24%);
+    }
   }
 
-  :active {
+  &:active {
     background-color: oklch(from var(--discord-white) l c h / 6%);
   }
 `;
@@ -55,7 +58,8 @@ export default function BotCommandCard() {
     <Wrapper>
       <code>{command}</code>
       <CopyButton onClick={() => navigator.clipboard.writeText(command)}>
-        <StyledCopyIcon />
+        <StyledCopyIcon aria-hidden />
+        <VisuallyHidden>Copy bot command</VisuallyHidden>
       </CopyButton>
     </Wrapper>
   );

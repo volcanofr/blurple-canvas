@@ -46,17 +46,12 @@ const CanvasContainer = styled("div")`
     border-radius: 0;
   }
 
-  :active {
+  &:active {
     cursor: grabbing;
   }
 
-  &,
-  * & {
+  & {
     user-select: none;
-  }
-
-  .loader {
-    position: absolute;
   }
 `;
 
@@ -78,28 +73,31 @@ const InviteButton = styled(Button)`
   background-color: oklch(
     from var(--discord-legacy-dark-but-not-black) l c h / 80%
   );
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 0 10px rgba(0 0 0 / 25%);
   color: white;
   font-size: 1.2rem;
   font-variation-settings: "wdth" 125;
   font-weight: 900;
-  padding: 0.1rem 1rem;
+  inset-inline-end: 0.5rem;
+  padding-block: 0.1rem;
+  padding-inline: 1rem;
   position: absolute;
-  right: 0.5rem;
   text-decoration: none;
   z-index: 1;
 
-  :hover {
-    background-color: var(--discord-blurple);
+  @media (hover: hover) and (pointer: fine) {
+    :hover {
+      background-color: var(--discord-blurple);
+    }
   }
 
   ${({ theme }) => theme.breakpoints.up("md")} {
-    bottom: 0.5rem;
     border-radius: 0.5rem 0.5rem 1rem 0.5rem;
+    inset-block-end: 0.5rem;
   }
 
   ${({ theme }) => theme.breakpoints.down("md")} {
-    top: 0.5rem;
+    inset-block-start: 0.5rem;
     border-radius: 0.5rem 0.5rem 0.5rem 1rem;
   }
 `;
@@ -132,11 +130,8 @@ const CanvasImageWrapper = styled("div", {
   }
 
   img:not(:first-child) {
+    inset: 0;
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
   }
 `;
 
@@ -883,6 +878,7 @@ export default function CanvasView() {
           />
         </ReticleContainer>
         <CanvasImageWrapper
+          aria-busy={isLaunching || isLoading}
           ref={canvasImageWrapperRef}
           isLoading={isLoading}
           isLaunching={isLaunching}
@@ -900,7 +896,7 @@ export default function CanvasView() {
           />
         </CanvasImageWrapper>
       </div>
-      {isLoading && <CircularProgress className="loader" />}
+      {isLoading && <CircularProgress style={{ position: "absolute" }} />}
     </CanvasContainer>
   );
 }

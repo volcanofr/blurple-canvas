@@ -67,14 +67,14 @@ const Tab = styled("li")<{ active?: boolean }>`
     content: "\\200B"; /* zero-width space */
   }
 
-  :hover,
-  :focus,
-  :focus-visible {
-    background-color: var(--discord-legacy-dark-but-not-black);
+  @media (hover: hover) and (pointer: fine) {
+    :hover {
+      background-color: var(--discord-legacy-dark-but-not-black);
+    }
   }
 
-  :focus,
   :focus-visible {
+    background-color: var(--discord-legacy-dark-but-not-black);
     outline: var(--focus-outline);
   }
 
