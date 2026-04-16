@@ -33,6 +33,9 @@ const config = {
   discord: {
     clientId: requiredEnv("DISCORD_CLIENT_ID"),
     clientSecret: requiredEnv("DISCORD_CLIENT_SECRET"),
+    discordAdminRole: process.env.DISCORD_ADMIN_ROLE_ID,
+    discordManagementGuild: process.env.DISCORD_MANAGEMENT_GUILD_ID,
+    discordModeratorRole: process.env.DISCORD_MODERATOR_ROLE_ID,
   },
   /**
    * Placed pixels are typically attributed to guilds they were place in.

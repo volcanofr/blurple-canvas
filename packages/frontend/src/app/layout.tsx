@@ -44,8 +44,9 @@ async function getServerSideProfile(): Promise<DiscordUserProfile | null> {
   }
 
   try {
-    return JSON.parse(profile.value);
-  } catch {
+    return JSON.parse(profile.value) as DiscordUserProfile;
+  } catch (error) {
+    console.error("[layout] failed to parse profile cookie", error);
     return null;
   }
 }
@@ -88,8 +89,8 @@ export default async function RootLayout({
     <html lang="en">
       <body>
         <AppRouterCacheProvider>
-          <AuthProvider profile={profile}>
-            <QueryClientProvider>
+          <QueryClientProvider>
+            <AuthProvider profile={profile}>
               <SelectedColorProvider>
                 <SelectedFrameProvider>
                   <CanvasProvider mainCanvasInfo={canvasInfo}>
@@ -97,8 +98,8 @@ export default async function RootLayout({
                   </CanvasProvider>
                 </SelectedFrameProvider>
               </SelectedColorProvider>
-            </QueryClientProvider>
-          </AuthProvider>
+            </AuthProvider>
+          </QueryClientProvider>
         </AppRouterCacheProvider>
       </body>
     </html>
