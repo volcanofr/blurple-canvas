@@ -43,16 +43,8 @@ const StyledCopyIcon = styled(CopyIcon)`
   inline-size: 1.5rem;
 `;
 
-export default function BotCommandCard() {
-  const { adjustedCoords: coordinates } = useCanvasContext();
-  const { color } = useSelectedColorContext();
-
+export default function BotCommandCard({ command }: { command: string }) {
   if (config.showBotCommands === false) return null;
-
-  if (!coordinates || !color) return null;
-
-  const { x, y } = coordinates;
-  const command = `/place x:${x} y:${y} color:${color.code}`;
 
   return (
     <Wrapper>
@@ -63,4 +55,15 @@ export default function BotCommandCard() {
       </CopyButton>
     </Wrapper>
   );
+}
+
+export function BotPlaceCommandCard() {
+  const { adjustedCoords: coordinates } = useCanvasContext();
+  const { color } = useSelectedColorContext();
+
+  if (!(coordinates && color)) return null;
+  const { x, y } = coordinates;
+  const command = `/place x:${x} y:${y} color:${color.code}`;
+
+  return <BotCommandCard command={command} />;
 }
