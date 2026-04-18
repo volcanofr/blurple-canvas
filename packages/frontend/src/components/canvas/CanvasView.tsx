@@ -12,6 +12,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import config from "@/config";
 import {
   useCanvasContext,
+  useCanvasViewContext,
   useSelectedColorContext,
   useSelectedFrameContext,
 } from "@/contexts";
@@ -369,16 +370,9 @@ export default function CanvasView() {
 
   const { color } = useSelectedColorContext();
   const [frame, setFrame] = useSelectedFrameContext();
-  const {
-    canvas,
-    containerRef,
-    coords,
-    isReticleVisible,
-    zoom,
-    setCanvas,
-    setCoords,
-    setZoom,
-  } = useCanvasContext();
+  const { canvas, setCanvas } = useCanvasContext();
+  const { containerRef, coords, isReticleVisible, zoom, setCoords, setZoom } =
+    useCanvasViewContext();
   const sourceImage = useCanvasImage(canvas.id);
 
   const [isLoading, setIsLoading] = useState(true);
@@ -1014,7 +1008,7 @@ export default function CanvasView() {
             />
           )}
           <Reticle
-            src="./images/reticle.png"
+            src="/images/reticle.png"
             alt="Reticle"
             className="reticle"
             style={{
