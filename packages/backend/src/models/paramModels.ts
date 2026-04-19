@@ -22,6 +22,17 @@ export const PixelHistoryParamModel = z.object({
   y: z.coerce.number().int().nonnegative(),
 });
 
+export const FrameGuildIdsQueryModel = z.object({
+  guildIds: z
+    .union([z.string(), z.array(z.string())])
+    .optional()
+    .transform((value) =>
+      value === undefined ? []
+      : Array.isArray(value) ? value
+      : [value],
+    ),
+});
+
 export interface CanvasIdParam {
   canvasId: string;
   [key: string]: string;

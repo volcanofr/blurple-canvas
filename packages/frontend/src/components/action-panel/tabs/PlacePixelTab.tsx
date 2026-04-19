@@ -7,7 +7,7 @@ import {
   useSelectedColorContext,
 } from "@/contexts";
 import { usePalette } from "@/hooks";
-import { decodeUserGuildsBase64 } from "@/util";
+import { getUserGuildIds } from "@/util";
 import { DynamicAnchorButton, PlacePixelButton } from "../../button";
 import { InteractiveSwatch } from "../../swatch";
 import { Heading } from "../ActionPanel";
@@ -16,13 +16,22 @@ import {
   ScrollBlock,
   TabBlock,
 } from "./ActionPanelTabBody";
-import BotCommandCard from "./BotCommandCard";
+import { BotPlaceCommandCard } from "./BotCommandCard";
 import ColorInfoCard from "./SelectedColorInfoCard";
 
 const ColorPicker = styled("div")`
+  --min-swatch-width: 3rem;
+
   display: grid;
   gap: 0.25rem;
-  grid-template-columns: repeat(auto-fill, minmax(3rem, 1fr));
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(var(--min-swatch-width), 1fr)
+  );
+
+  ${({ theme }) => theme.breakpoints.up("lg")} {
+    --min-swatch-width: 3.5rem;
+  }
 `;
 
 const PlacePixelTabBlock = styled(TabBlock)`
@@ -51,7 +60,7 @@ export const partitionPalette = (palette: Palette) => {
 };
 
 function isUserInServer(user: DiscordUserProfile, serverId: string) {
-  const guildIds = decodeUserGuildsBase64(user);
+  const guildIds = getUserGuildIds(user);
   return guildIds.includes(serverId);
 }
 
@@ -176,7 +185,7 @@ export default function PlacePixelTab({
             {selectedColor?.guildName ?? "server"}
           </DynamicAnchorButton>
         )}
-        {!readOnly && isLarge && <BotCommandCard />}
+        {!readOnly && isLarge && <BotPlaceCommandCard />}
       </ActionPanelTabBody>
     </PlacePixelTabBlock>
   );
