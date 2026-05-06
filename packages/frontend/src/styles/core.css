@@ -239,16 +239,15 @@
    * https://developer.mozilla.org/en-US/docs/Web/CSS/@supports#font-tech
    */
   @supports (font-tech(variations)) {
-    html {
-      --text-slnt: 0;
-      font-variation-settings: "slnt" var(--text-slnt);
+    * {
+      font-variation-settings: "slnt" var(--text-slnt, 0);
     }
 
     em,
     i,
     var {
-      font-style: normal;
       --text-slnt: -12;
+      font-style: normal;
     }
   }
 }
