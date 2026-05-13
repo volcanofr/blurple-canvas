@@ -9,6 +9,9 @@ declare global {
 declare module "express-session" {
   interface SessionData {
     discordAccessToken?: string;
+    discordRefreshToken?: string;
+    discordTokenExpiresAt?: number;
+    discordTokenLifetimeMs?: number;
     discordGuildFlags?: Record<string, GuildData>;
   }
 }
