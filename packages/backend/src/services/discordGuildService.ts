@@ -33,7 +33,7 @@ interface GuildPermissionsSummary {
 
 interface DiscordRequestOptions {
   endpoint: string;
-  authorization: string;
+  authorization: `Bearer ${string}`;
 }
 
 async function discordRequest<T>({
@@ -73,7 +73,7 @@ async function discordRequest<T>({
   return (await response.json()) as T;
 }
 
-function asBearerToken(accessToken: string): string {
+function asBearerToken<T extends string>(accessToken: T): `Bearer ${T}` {
   return `Bearer ${accessToken}`;
 }
 
